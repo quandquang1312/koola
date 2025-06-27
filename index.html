@@ -30,18 +30,18 @@
     <script>
         const problems = [
             {
-                title: "Two Sum",
-                difficulty: "Easy",
-                tags: ["array", "hashmap"],
-                source: "Leetcode",
-                link: "https://leetcode.com/problems/two-sum"
+                title: "Tree Jumps",
+                rating: 1600,
+                tags: ["dfs", "dp", "trees"],
+                source: "Codeforces",
+                link: "https://codeforces.com/contest/2070/problem/D"
             },
             {
-                title: "Two Sum II",
-                difficulty: "Medium",
-                tags: ["array", "hashmap"],
-                source: "Leetcode",
-                link: "https://leetcode.com/problems/two-sum-ii"
+                title: "k-Tree",
+                rating: 1300,
+                tags: ["dp", "implementation", "trees"],
+                source: "Codeforces",
+                link: "https://codeforces.com/contest/431/problem/C"
             },
         ];
 
@@ -50,7 +50,7 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><a href="${problem.link}" target="_blank">${problem.title}</a></td>
-                <td>${problem.difficulty}</td>
+                <td>${problem.rating}</td>
                 <td>${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>
                 <td>${problem.source}</td>
             `;
