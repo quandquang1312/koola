@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 2em;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solod #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: #f4f4f4;
+}
+
+.tag {
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+    font-size: 0.9em;
+}
+
+.rating-circle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+input[type="range"] {
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5em 0;
+}
+
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2em;
+}
+
+#auth-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    padding: 1.5em 2em;
+    min-width: 220px;
+    max-width: 260px;
+    font-size: 1em;
+}
+
+#auth-section h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #3730a3;
+    letter-spacing: 1px;
+}
+
+#auth-section input[type="text"],
+#auth-section input[type="password"] {
+    width: 100%;
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1em;
+    background: #f9fafb;
+    transition: border 0.2s;
+}
+
+#auth-section input[type="text"]:focus,
+#auth-section input[type="password"]:focus {
+    border: 1.5px solid #6366f1;
+    outline: none;
+}
+
+#auth-section button {
+    background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5em 1.2em;
+    margin-top: 0.5em;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#auth-section button:hover {
+    background: linear-gradient(90deg, #3730a3 60%, #6366f1 100%);
+}
+
+#auth-section p {
+    font-size: 0.95em;
+    margin: 0.5em 0 0 0;
+}
+
+#auth-section a {
+    color: #6366f1;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#auth-section a:hover {
+    text-decoration: underline;
+}
+
+#login-form,
+#register-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#login-form h2,
+#register-form h2 {
+    margin: 0 0.5em 0 0;
+    font-size: 1em;
+}
+
+#login-form input,
+#register-form input {
+    width: 120px;
+    min-width: 0;
+    margin: 0;
+}
+
+#login-form button,
+#register-form button {
+    margin: 0;
+}
+
+.auth-link {
+    margin: 0;
+    font-size: 0.95em;
+}

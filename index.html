@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="'UTF-8">
     <title>Koola</title>
-    <style>
-        body { font-family: Arial, Helvetica, sans-serif; margin: 2em; }
-        table {border-collapse: collapse; width: 100%; }
-        th, td {border: 1px solod #ccc; padding: 8px; text-align: left; }
-        th { background: #f4f4f4; }
-        .tag { background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; margin-right: 4px; font-size: 0.9em; }
-        .rating-circle {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-right: 6px;
-            vertical-align: middle;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Koola Archive!</h1>
+    <div class="header-bar">
+        <h1>Koola Archive!</h1>
+        <div id="auth-section">
+            <div id="login-form">
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
+            <p class="auth-link">Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+            <div id="register-form" style="display:none;">
+                <input type="text" id="register-username" placeholder="Username">
+                <input type="password" id="register-password" placeholder="Password">
+                <button onclick="register()">Register</button>
+            </div>
+            <p class="auth-link" style="display:none;">Already have an account? <a href="#" onclick="showLogin()">Login</a>
+            </p>
+            <div id="user-info" style="display:none;">
+                <span id="welcome-user"></span>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+    <label>
+        <b>Rating: </b>
+        <span id="slider-value">0</span>
+        <input type="range" id="rating-slider" min="0" max="3500" step="100" value="0">
+    </label>
+    <br><br>
     <label>
         <input type="checkbox" id="toggle-tags" checked>
         Show Tags
     </label>
+
     <table>
         <thread>
             <tr>
@@ -40,6 +56,7 @@
     </table>
 
     <script>
+        // Mock Data
         const problems = [
             {
                 title: "Tree Jumps",
@@ -55,30 +72,130 @@
                 source: "Codeforces",
                 link: "https://codeforces.com/contest/431/problem/C"
             },
-        ];
+        ]
 
-        const table = document.getElementById('problem-table');
-        problems.forEach(problem => {
-            let color = "#6b7280"
-            if (problem.rating >= 1000 && problem.rating <= 1500) color = "#f59e42"
-            if (problem.rating > 1500) color = "#e11d48"
+        // Ulti getColor function
+        function getColor(rating) {
+            if (rating < 1000) return "#6b7280";
+            if (rating < 1500) return "#f59e42";
+            return "#e11d48";
+        }
 
-            const row = document.createElement('tr')
-            row.innerHTML = `
-                <td><a href="${problem.link}" target="_blank">${problem.title}</a></td>
-                <td><span class="rating-circle" style="background: ${color}"></span>${problem.rating}</td>
-                <td class="tags-col">${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>
-                <td>${problem.source}</td>
-            `;
-            table.appendChild(row)
+        // Render Table
+        function renderTable(minRating) {
+            const table = document.getElementById('problem-table')
+            table.innerHTML = ''
+            problems
+                .filter(problem => problem.rating >= minRating)
+                .forEach(problem => {
+                    let color = getColor(problem.rating)
+                    const row = document.createElement('tr')
+
+                    const showRating = document.getElementById('toggle-tags').checked
+
+                    row.innerHTML = `
+                        <td><a href="${problem.link}" target="_blank">${problem.title}</a></td>
+                        <td><span class="rating-circle" style="background: ${color}"></span>${problem.rating}</td>
+                        ${showRating ? `<td class="tags-col">${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>` : '' }
+                        <td>${problem.source}</td>
+                    `;
+                    table.appendChild(row)
+                })
+        }
+
+        // Initial Table
+        renderTable(0)
+
+        // Slider event
+        const slider = document.getElementById('rating-slider')
+        const sliderValue = document.getElementById('slider-value')
+        slider.addEventListener('input', function () {
+            sliderValue.textContent = this.value
+            renderTable(Number(this.value))
         })
 
-        document.getElementById('toggle-tags').addEventListener('change', function() {
+        // Checkbox
+        document.getElementById('toggle-tags').addEventListener('change', function () {
             const show = this.checked
             document.querySelectorAll('.tags-col').forEach(cell => {
                 cell.style.display = show ? '' : 'none'
             })
         })
+
+        // Auth logic for toggling forms
+        function showRegister() {
+            document.getElementById('login-form').style.display = 'none';
+            document.querySelectorAll('.auth-link')[0].style.display = 'none';
+            document.getElementById('register-form').style.display = 'flex';
+            document.querySelectorAll('.auth-link')[1].style.display = '';
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').style.display = 'none';
+            document.querySelectorAll('.auth-link')[1].style.display = 'none';
+            document.getElementById('login-form').style.display = 'flex';
+            document.querySelectorAll('.auth-link')[0].style.display = '';
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    localStorage.setItem('loggedInUser', username);
+                    showUser();
+                } else {
+                    alert(data.error || 'Invalid credentials');
+                }
+            })
+            .catch(() => alert('Network error'));
+        }
+
+        function register() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    alert('Registration successful! Please login.');
+                    showLogin();
+                } else {
+                    alert(data.error || 'Registration failed');
+                }
+            })
+            .catch(() => alert('Network error'));
+        }
+
+        function showUser() {
+            const user = localStorage.getItem('loggedInUser');
+            if (user) {
+                document.getElementById('auth-section').querySelectorAll('div').forEach(div => div.style.display = 'none');
+                document.getElementById('auth-section').querySelectorAll('p').forEach(p => p.style.display = 'none');
+                document.getElementById('welcome-user').textContent = 'Welcome, ' + user + '!';
+                document.getElementById('user-info').style.display = '';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            document.getElementById('user-info').style.display = 'none';
+            document.getElementById('login-form').style.display = 'flex';
+            document.querySelectorAll('.auth-link')[0].style.display = '';
+        }
+
+        showUser();
     </script>
 </body>
+
 </html>
