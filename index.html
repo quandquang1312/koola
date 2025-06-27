@@ -9,16 +9,28 @@
         th, td {border: 1px solod #ccc; padding: 8px; text-align: left; }
         th { background: #f4f4f4; }
         .tag { background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; margin-right: 4px; font-size: 0.9em; }
+        .rating-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
     <h1>Koola Archive!</h1>
+    <label>
+        <input type="checkbox" id="toggle-tags" checked>
+        Show Tags
+    </label>
     <table>
         <thread>
             <tr>
                 <th>Title</th>
                 <th>Difficulty</th>
-                <th>Tags</th>
+                <th class="tags-col">Tags</th>
                 <th>Source</th>
             </tr>
         </thread>
@@ -47,15 +59,26 @@
 
         const table = document.getElementById('problem-table');
         problems.forEach(problem => {
-            const row = document.createElement('tr');
+            let color = "#6b7280"
+            if (problem.rating >= 1000 && problem.rating <= 1500) color = "#f59e42"
+            if (problem.rating > 1500) color = "#e11d48"
+
+            const row = document.createElement('tr')
             row.innerHTML = `
                 <td><a href="${problem.link}" target="_blank">${problem.title}</a></td>
-                <td>${problem.rating}</td>
-                <td>${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>
+                <td><span class="rating-circle" style="background: ${color}"></span>${problem.rating}</td>
+                <td class="tags-col">${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>
                 <td>${problem.source}</td>
             `;
-            table.appendChild(row);
-        });
+            table.appendChild(row)
+        })
+
+        document.getElementById('toggle-tags').addEventListener('change', function() {
+            const show = this.checked
+            document.querySelectorAll('.tags-col').forEach(cell => {
+                cell.style.display = show ? '' : 'none'
+            })
+        })
     </script>
 </body>
 </html>
