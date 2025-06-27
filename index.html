@@ -2,11 +2,60 @@
 <html>
 <head>
     <meta charset="'UTF-8">
-    <title>Hello World My Vercel App</title>
+    <title>Koola</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; margin: 2em; }
+        table {border-collapse: collapse; width: 100%; }
+        th, td {border: 1px solod #ccc; padding: 8px; text-align: left; }
+        th { background: #f4f4f4; }
+        .tag { background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; margin-right: 4px; font-size: 0.9em; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Vercel App!</h1>
-    <p>This is a simple landing page</p>
-    <p>Visit the <a href="/api/hello">Hello API</a></p>
+    <h1>Koola Archive!</h1>
+    <table>
+        <thread>
+            <tr>
+                <th>Title</th>
+                <th>Difficulty</th>
+                <th>Tags</th>
+                <th>Source</th>
+            </tr>
+        </thread>
+        <tbody id="problem-table">
+
+        </tbody>
+    </table>
+
+    <script>
+        const problems = [
+            {
+                title: "Two Sum",
+                difficulty: "Easy",
+                tags: ["array", "hashmap"],
+                source: "Leetcode",
+                link: "https://leetcode.com/problems/two-sum"
+            },
+            {
+                title: "Two Sum II",
+                difficulty: "Medium",
+                tags: ["array", "hashmap"],
+                source: "Leetcode",
+                link: "https://leetcode.com/problems/two-sum-ii"
+            },
+        ];
+
+        const table = document.getElementById('problem-table');
+        problems.forEach(problem => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><a href="${problem.link}" target="_blank">${problem.title}</a></td>
+                <td>${problem.difficulty}</td>
+                <td>${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</td>
+                <td>${problem.source}</td>
+            `;
+            table.appendChild(row);
+        });
+    </script>
 </body>
 </html>
