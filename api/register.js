@@ -6,7 +6,7 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 })
 
-module.exports = async (req, res) => {
+module.exports = async function registerHandler(req, res) {
     if (req.method !== 'POST') {
         res.status(405).json({ error: 'Method not allowed' })
         return
