@@ -2,6 +2,7 @@
     "name": "vercel-hello-world",
     "version": "1.0.0",
     "dependencies": {
-        "bcryptjs": "^3.0.2"
+        "bcryptjs": "^3.0.2",
+        "pg": "^8.16.3"
     }
 }
